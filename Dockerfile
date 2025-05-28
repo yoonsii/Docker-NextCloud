@@ -27,6 +27,10 @@ RUN unzip /tmp/nextcloud.zip && \
 # Copy Apache virtual host configuration
 COPY nextcloud.conf /etc/apache2/sites-available/000-default.conf
 
+# Copy the cert over
+COPY zscaler.crt /usr/local/share/ca-certificates/
+RUN update-ca-certificates
+
 # Set correct ownership for Apache
 RUN chown -R www-data:www-data /var/www/html/nextcloud
 

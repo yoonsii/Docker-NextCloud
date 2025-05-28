@@ -1,8 +1,10 @@
 #!/bin/bash
 
+LOG=install.log
+
 # Run the Nextcloud install if config/config.php does not exist
 if [ ! -f /var/www/html/config/config.php ]; then
-  echo "Installing Nextcloud..."
+  echo "Installing Nextcloud..." | tee -a $LOG
   sudo -E -u www-data php occ maintenance:install \
     --database="mysql" \
     --database-name="nextcloud" \
@@ -10,9 +12,9 @@ if [ ! -f /var/www/html/config/config.php ]; then
     --database-pass="${DB_PASS}" \
     --database-host="mysql" \
     --admin-user="nextcloud" \
-    --admin-pass="nextcloud" 
+    --admin-pass="nextcloud" -vvv | tee -a $LOG
 else
-  echo "Nextcloud already installed."
+  echo "Nextcloud already installed." | tee -a $LOG
 fi
 
 # Disable the trusted domains check by modifying config.php (for testing)
